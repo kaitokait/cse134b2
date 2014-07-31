@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lucky13</title>
+    <link rel="stylesheet" type="text/css" href="css/styles_tp_nav.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles_tp_aboutus.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/starter-template.css" rel="stylesheet">
+    <script src="js/database-scripts.js"></script>
+    <script>
+        function functSubmit() {
+            // needs validation
+            var strURL = document.getElementsByName("urlLocation")[0].value;
+            var strHashTag = document.getElementsByName("hashTagList")[0].value;
+            MemeHandler.generate();
+            var memeFile = MemeHandler.getImg();
+
+            if(strHashTag == ""){
+                alert("You must have at least one tag identifier.");
+            }
+            else if (strHashTag != "" && String(strHashTag).charAt(0) != '#') {
+                strHashTag = "#" + strHashTag;
+            }
+
+            if (strURL == "" && memeFile == "") {
+                alert("You must either upload a 'memefile' or have a url to an existing meme!");
+            }
+            else {
+                var path = (memeFile != "") ? memeFile : strURL;
+                var meme = MemeHandler.makeMeme(path, MemeHandler.getTitle(), strHashTag);
+
+                var request = addData(meme, "memes", "readwrite");
+                request.onerror = function (event) {
+                    alert("an error has occurred: " + request.error);
+                    // error handling here
+                }
+                request.onsuccess = function (event) {
+                    alert("Success");
+                    parent.location.href = "index.html";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href='index.html'><img id="logo" alt="" src="images/13.jpg"></a></li>
+                <!--<li><a href='../index.html'><span>Home</span></a></li>-->
+                <li><a href='index.html'><span>Home</span></a></li>
+                <li class='active'><a href='submit.html'><span>Submit a Meme</span></a></li>
+                <li><a href='create.html'><span>Create a New Meme</span></a></li>
+                <li><a href='aboutus.html'><span>About Us</span></a></li>
+
+                <li style="padding-left:50px">
+<!-- LOGIN SUBMISSION FORM // WHY ISN'T THIS STUFF PUT INTO THE STANDARD TEMPLATE? -->
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputPassword2">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                        </div>
+                        <div class="checkbox">
+                        </div>
+                        <button type="submit" class="btn btn-success">Sign in</button>
+                    </form>
+                </li>&nbsp
+                <a href="register.html"><button class="btn btn-danger">Sign Up</button></a>
+                <!--<li><a href='../dopamemes_website/index.html'><span>Our Page</span></a></li>-->
+                <!--<li class='last'><a href='../contact/contact.html'><span>Contact</span></a></li>-->
+            </ul>
+        </nav>
+    </header>
+    <br><br><br>
+
+    <div class="container1" style="margin-bottom:50px; float: left;">
+    </div>
+    <div class="container" style="margin-bottom:50px; float:left">
+        <div class="jumbotron text-center">
+<!-- MEME SUBMISSION FORM -->
+            <form role="form" action="" onsubmit="functSubmit(); return false;">
+                <div class="form-group" style="text-align:left">
+                    <label for="URL">URL</label>
+                    <input class="form-control" id="exampleInputEmail1" placeholder="Put the existing Meme's URL here"
+                           name="urlLocation">
+                </div>
+                <div class="form-group" style="text-align:left">
+                    <label for="Tags">Tags</label>
+                    <input class="form-control" id="exampleInputPassword1" placeholder="#Tagitup (This will go away once you start typing)"
+                           name="hashTagList">
+                </div>
+                <div class="form-group" style="text-align:left">
+                    <label for="exampleInputFile">OR</label>
+                    <label for="exampleInputFile">File input</label>
+                    <input type="file" name="memeFile" onchange="MemeHandler.onFileSelect(event);">
+                </div>
+                <div class="checkbox">
+                    <img id="imgCheck" height="175" width="175" />
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+        <!-- End content for classes -->
+
+        <br><div style="padding-bottom:10px; text-align:center"><a href="index.html">&copy; 2014 Lucky13 . All rights reserved.</a> </div>
+    </div>
+
+    <div class="container2" style="margin-bottom:50px; float: left;">
+    </div>
+
+</body>
+<footer></footer>
+</html>

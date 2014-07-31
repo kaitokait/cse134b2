@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lucky13</title>
+    <link rel="stylesheet" type="text/css" href="css/styles_tp_nav.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles_tp_aboutus.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/starter-template.css" rel="stylesheet">
+    <style>
+        a {
+            cursor: pointer;
+        }
+    </style>
+    <script src="js/database-scripts.js"></script>
+    <script>
+        /**
+         * transfer: redirects the page to the editmeme.html page
+         *           before updating the MemeHandler persistent data.
+         */
+        function transfer(imgPath) {
+            var img = new Image();
+            img.src = imgPath;
+            img.title = "";
+            MemeHandler.img = img;
+            MemeHandler.generate();
+            parent.location.href = "editmeme.html";
+        }
+
+        function onFileSelected(event) {
+            MemeHandler.onFileSelect(event);
+        }
+
+        function redirectMeme(event) {
+            if (MemeHandler.getImg() == undefined) {
+                alert("You must select a file to upload to proceed.");
+            }
+            else {                
+                MemeHandler.generate();
+                parent.location.href = "editmeme.html";
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href='index.html'><img id="logo" alt="" src="images/13.jpg"></a></li>
+                <!--<li><a href='../index.html'><span>Home</span></a></li>-->
+                <li><a href='index.html'><span>Home</span></a></li>
+                <li><a href='submit.html'><span>Submit a Meme</span></a></li>
+                <li class='active'><a href='create.html'><span>Create a New Meme</span></a></li>
+                <li><a href='aboutus.html'><span>About Us</span></a></li>
+
+                <li style="padding-left:50px">
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputPassword2">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                        </div>
+                        <div class="checkbox">
+                        </div>
+                        <button type="submit" class="btn btn-success">Sign in</button>
+                    </form>
+                </li>
+                <button class="btn btn-danger" onclick="parent.location='register.html'" style="margin-left:10px">Sign Up</button>					<!--<li><a href='../dopamemes_website/index.html'><span>Our Page</span></a></li>-->
+                <!--<li class='last'><a href='../contact/contact.html'><span>Contact</span></a></li>-->
+            </ul>
+        </nav>
+    </header>
+    <br><br><br>
+
+    <div class="container1" style="margin-bottom:50px; float: left;">
+    </div>
+    <div class="container" style="margin-bottom:50px; float:left">
+
+
+        <div class="jumbotron text-center">
+            <div>Pick from a template</div>
+            <div>
+                <a onclick="transfer('images/ourleader.gif');" ><img src="images/ourleader.gif" width="175" height="175"></a>
+                <a onclick="transfer('images/2.jpg');"><img src="images/2.jpg" width="175" height="175"></a>
+                <a onclick="transfer('images/12.jpg');"><img src="images/12.jpg" width="175" height="175"></a>
+            </div>
+            <div>
+                <a onclick="transfer('images/9174.jpg');"><img src="images/9174.jpg" width="175" height="175"></a>
+                <a onclick="transfer('images/819.jpg');"><img src="images/819.jpg" width="175" height="175"></a>
+                <a onclick="transfer('images/89.jpg');"><img src="images/89.jpg" width="175" height="175"></a>
+            </div>
+            <div><br><b>OR</b></div>
+
+                <div class="form-group" style="text-align:left">
+                    <label for="exampleInputFile">File input</label>
+                    <input type="file" id="exampleInputFile" onchange="onFileSelected(event);">
+                </div>
+                <div class="checkbox">
+                   <img id="imgCheck" height="175" width="175"/>
+                </div>
+                <button type="submit" class="btn btn-default" onclick="redirectMeme();">Submit</button>
+
+
+        </div>
+
+
+        <!-- End content for classes -->
+
+        <br><div style="padding-bottom:10px; text-align:center"><a href="index.html">&copy; 2014 Lucky13 . All rights reserved.</a> </div>
+    </div>
+
+    <div class="container2" style="margin-bottom:50px; float: left;">
+    </div>
+
+</body>
+<footer></footer>
+</html>

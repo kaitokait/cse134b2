@@ -1,0 +1,152 @@
+﻿    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lucky13</title>
+    <link rel="stylesheet" type="text/css" href="css/styles_tp_nav.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles_tp_aboutus.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/starter-template.css" rel="stylesheet">
+    <style>
+        #editMemeCanvas {
+            margin-bottom: 30px;
+            border: 1px solid black;
+        }
+    </style>
+    <script src="js/database-scripts.js"></script>
+    <script>
+        var context;
+        var canvas;
+        var base_img;
+        window.onload = function (event) {
+            canvas = document.getElementById("editMemeCanvas");
+            context = canvas.getContext('2d');
+
+            make_base();
+        }
+
+        function make_base() {
+            var imgUrl = MemeHandler.getImg();
+
+            // gather the image from the URL
+            var base_image = new Image();
+            base_image.src = imgUrl;
+            base_image.onload = function (event) {
+                canvas.height = base_image.height;
+                canvas.width = base_image.width;
+                context.drawImage(base_image, 0, 0);
+                base_img = base_image;
+            }
+        }
+
+        function printText() {
+            var top = document.getElementById("topText").value;
+            var bottom = document.getElementById("botText").value;
+
+            context.drawImage(base_img, 0, 0);
+
+            context.strokeStyle = "black";
+            context.lineJoin = "round";
+            context.lineWidth = 5;
+
+            context.fillStyle = "white";
+            context.textAlign = "center";
+
+            context.font = "normal 32px Arial";
+            context.strokeText(top, canvas.width / 2, 32, canvas.width - 50);
+            context.fillText(top, canvas.width / 2, 32, canvas.width - 50);
+            context.strokeText(bottom, canvas.width / 2, canvas.height - 16, canvas.width - 50);
+            context.fillText(bottom, canvas.width / 2, canvas.height - 16, canvas.width - 50);
+        }
+        
+        function saveImg() {
+            var myImg = canvas.toDataURL("image/png;base64");
+            //var myImg = context.getImageData(0, 0, canvas.width, canvas.height);
+            var strHashTag = document.getElementById("tagText").value;
+
+            var meme = MemeHandler.makeMeme(MemeHandler.getImg(), MemeHandler.getTitle(), strHashTag);
+            var request = addData(meme, "memes", "readwrite");
+            request.onerror = function (event) {
+                alert("An error occurred");
+            }
+            request.onsuccess = function (event) {
+                alert("Meme successfully created.");
+                location.href = "index.html";
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href='index.html'><img id="logo" alt="" src="images/13.jpg"></a></li>
+                <!--<li><a href='../index.html'><span>Home</span></a></li>-->
+                <li><a href='index.html'><span>Home</span></a></li>
+                <li><a href='submit.html'><span>Submit a Meme</span></a></li>
+                <li><a href='create.html'><span>Create a New Meme</span></a></li>
+                <li><a href='aboutus.html'><span>About Us</span></a></li>
+
+                <li style="padding-left:50px">
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputPassword2">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                        </div>
+                        <div class="checkbox">
+                        </div>
+                        <button type="submit" class="btn btn-success">Sign in</button>
+                    </form>
+                </li>&nbsp
+                <a href="register.html"><button class="btn btn-danger">Sign Up</button></a>
+                <!--<li><a href='../dopamemes_website/index.html'><span>Our Page</span></a></li>-->
+                <!--<li class='last'><a href='../contact/contact.html'><span>Contact</span></a></li>-->
+            </ul>
+        </nav>
+    </header>
+    <br><br><br>
+
+    <div class="container1" style="margin-bottom:50px; float: left;">
+    </div>
+    <div class="container" style="margin-bottom:50px; float:left">
+
+
+
+        <div class="jumbotron text-center">
+            <form onsubmit="saveImg(); return false;">
+<!--            <img src="images/ourleader.gif" width="175" height="175"><br><br><br> -->
+<!-- This is where the magic happens -->
+            <canvas id="editMemeCanvas"></canvas>
+
+            <div class="form-group">
+                <label class="sr-only" for="topText">Top Text</label>
+                <input class="form-control" id="topText" onkeyup="printText();" placeholder="Top Text Here!">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="botText">Bottom Text</label>
+                <input class="form-control" id="botText" onkeyup="printText();" placeholder="Bottom Text Here!">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="tagText">Tags</label>
+                <input class="form-control" id="tagText" placeholder="#Tags">
+            </div>
+            <button type="submit" class="btn btn-success">Generate</button>
+            </form>
+        </div>
+
+        <!-- End content for classes -->
+
+        <br><div style="padding-bottom:10px; text-align:center"><a href="index.html">&copy; 2014 Lucky13 . All rights reserved.</a> </div>
+    </div>
+
+    <div class="container2" style="margin-bottom:50px; float: left;">
+    </div>
+
+</body>
+<footer></footer>
+</html>
