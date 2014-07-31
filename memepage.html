@@ -15,22 +15,44 @@
         var memeObject;
         var commentObject;
         window.onload = function (event) {
-            loadDatabaseObject();
-            var memeIMG = document.getElementById("memeIMG");
-            var key = document.cookie.split("=")[1];
-            if (key == undefined) {
-                alert("Unknown file indentification");
-                //parent.location.href = "index.html";
+            if (!indexedDBOk) {
+                document.write("IndexedDB is not supported with this browser");
+                return;
             }
-            var request = getData(Number(key), "memes", "readonly");
-            request.onerror = function (event) {
-                // some error handling
+            var openRequest = indexedDB.open("meme_data", 3);
+            openRequest.onupgradeneeded = function (event) {
+                var update = event.target.result;
+
+                if (!update.objectStoreNames.contains("memes")) {
+                    var objStore = update.createObjectStore("memes", { keyPath: "key", autoIncrement: "true" });
+                    objStore.createIndex("url", "url", { unique: false });
+                }
+                if (!update.objectStoreNames.contains("users")) {
+                    var objStore = update.createObjectStore(CommentsWrapper.dbName, { keyPath: "id", autoIncrement: "true" });
+                }
+                if (!update.objectStoreNames.contains("comments")) {
+                    var objStore = update.createObjectStore(UserWrapper.dbName, { keyPath: "id", autoIncrement: "true" });
+                }
             }
-            request.onsuccess = function (event) {
-                var result = event.target.result;
-                memeObject = result;
-                memeIMG.src = result.url;
-                //document.cookie = "key=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
+            openRequest.onsuccess = function (event) {
+                db = event.target.result;
+                var memeIMG = document.getElementById("memeIMG");
+                var key = document.cookie.split("=")[1];
+                if (key == undefined) {
+                    alert("Unknown file indentification");
+                    //parent.location.href = "index.html";
+                }
+                var request = getData(Number(key), "memes", "readonly");
+                request.onerror = function (event) {
+                    // some error handling
+                }
+                request.onsuccess = function (event) {
+                    var result = event.target.result;
+                    memeObject = result;
+                    memeIMG.src = result.url;
+                    //document.cookie = "key=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                }
             }
         }
 
