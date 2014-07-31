@@ -61,11 +61,11 @@
         }
         
         function saveImg() {
-            var myImg = canvas.toDataURL("image/png;base64");
+            var myImg = canvas.toDataURL("image/png;base64"); // copy the image from the canvas
             //var myImg = context.getImageData(0, 0, canvas.width, canvas.height);
             var strHashTag = document.getElementById("tagText").value;
 
-            var meme = MemeHandler.makeMeme(MemeHandler.getImg(), MemeHandler.getTitle(), strHashTag);
+            var meme = MemeHandler.makeMeme(myImg, MemeHandler.getTitle(), strHashTag);
             var request = addData(meme, "memes", "readwrite");
             request.onerror = function (event) {
                 alert("An error occurred");
